@@ -1,53 +1,74 @@
 ﻿@using WebApplication1.DataAccess.Models;
-@model List<Menu>
+@model List<MainMenu>
+@{
+    string showHeader = "";
+}
 
-<div class="position-sticky pt-3">
-    <ul class="nav flex-column">
-        <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">
-                <span data-feather="home"></span>
-                首頁
-            </a>
-        </li>
-        @foreach (Menu item in Model)
-        {
-            <li class="nav-item">
-                @Html.ActionLink(item.Name, item.Action,item.Controller, new { area = item.Area }, new { @class = "nav-link" } )
-            </li>
-        }
-    </ul>
+<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse shadow">
+    <div class="position-sticky pt-3">
+        <div class="accordion accordion-flush" id="accordionFlushExample">
+            @foreach (MainMenu item in Model)
+            {
+                string headingId = $"flush-heading{item.Id}";
+                string collapseId = $"flush-collapse{item.Id}";
 
-    @*
-    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-        <span>Saved reports</span>
-        <a class="link-secondary" href="#" aria-label="Add a new report">
-            <span data-feather="plus-circle"></span>
-        </a>
-    </h6>
-    <ul class="nav flex-column mb-2">
-        <li class="nav-item">
-            <a class="nav-link" href="#">
-                <span data-feather="file-text"></span>
-                Current month
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">
-                <span data-feather="file-text"></span>
-                Last quarter
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">
-                <span data-feather="file-text"></span>
-                Social engagement
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">
-                <span data-feather="file-text"></span>
-                Year-end sale
-            </a>
-        </li>
-    </ul>*@
-</div>
+                <div class="accordion-item">
+
+                    @if (Context.Request.Path.ToString().Contains(item.Name))
+                    {
+                        <h2 class="accordion-header shadow-sm" id="@headingId">
+                            <button class="accordion-button collapsed bg-light" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#@collapseId" aria-expanded="true" aria-controls="@collapseId">
+                                @item.Name
+                            </button>
+                        </h2>
+                        <div id="@collapseId" class="accordion-collapse collapse show" aria-labelledby="@headingId">
+                            <ul class="nav flex-column">
+                                @if (item.Children.Count > 0)
+                                {
+                                    foreach (Menu child in item.Children)
+                                    {
+                                        <li class="nav-item">
+                                            @if (Context.Request.Path.Equals(Url.Action(child.Action, child.Controller, new { area = child.Area })))
+                                            {
+                                                @Html.ActionLink(child.Name, child.Action, child.Controller, new { area = child.Area }, new { @class = "nav-link active" });
+                                            }
+                                            else
+                                            {
+                                                @Html.ActionLink(child.Name, child.Action, child.Controller, new { area = child.Area }, new { @class = "nav-link" });
+                                            }
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    }
+                    else
+                    {
+                        <h2 class="accordion-header shadow-sm" id="@headingId">
+                            <button class="accordion-button collapsed bg-light" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#@collapseId" aria-expanded="false" aria-controls="@collapseId">
+                                @item.Name
+                            </button>
+                        </h2>
+                        <div id="@collapseId" class="accordion-collapse collapse" aria-labelledby="@headingId">
+                            <ul class="nav flex-column">
+                                @if (item.Children.Count > 0)
+                                {
+                                    foreach (Menu child in item.Children)
+                                    {
+                                        <li class="nav-item">
+                                            @Html.ActionLink(child.Name, child.Action, child.Controller, new { area = child.Area }, new { @class = "nav-link" })
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    }
+
+                </div>
+            }
+        </div>
+    </div>
+</nav>
+

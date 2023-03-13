@@ -2,4 +2,22 @@
 @{
     Layout = "_Layout";
 }
-<h2>TEST1</h2>
+
+<div class="row pt-3">
+    <div id='calendar' class="col-lg-12"></div>
+</div>
+
+
+@section Scripts {
+    <script src="~/node_modules/@@fullcalendar/core/index.global.min.js"></script>
+    <script src="~/node_modules/@@fullcalendar/daygrid/index.global.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth'
+            });
+            calendar.render();
+        });
+    </script>
+}
