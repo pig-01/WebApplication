@@ -9,7 +9,8 @@ builder.Services.AddControllersWithViews()
         options.ViewLocationFormats.Add("Views/Shared/{0}.cshtml");
     });
 
-builder.Services.AddScoped<ContosoUniversityContext>();
+
+builder.Services.AddSqlServer<ContosoUniversityContext>(builder.Configuration.GetConnectionString("DefaultConnection"));
 
 
 var app = builder.Build();
