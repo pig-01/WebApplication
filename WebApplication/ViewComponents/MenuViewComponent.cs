@@ -6,9 +6,9 @@ namespace WebApplication1.ViewComponents;
 [ViewComponent]
 public class MenuViewComponent : ViewComponent
 {
-    public IViewComponentResult Invoke(string userId)
+    public IViewComponentResult Invoke()
     {
-        List<MainMenu> menuList = new List<MainMenu>(){
+        List<MainMenu> menuList = new(){
             new MainMenu(){
                 Id = 1,
                 Name = "Test",
@@ -44,6 +44,21 @@ public class MenuViewComponent : ViewComponent
                         Name = "Test4",
                         Description = "測試4",
                         Url = "Test/Test/Test4"
+                    }
+                }
+            },
+            new MainMenu()
+            {
+                Id = 2,
+                Name= "Admin",
+                Children= new List<Menu>()
+                {
+                    new Menu()
+                    {
+                        Id = 5,
+                        Name = "Admin1",
+                        Description = "管理1",
+                        Url = "Admin/Admin/Admin1"
                     }
                 }
             }
