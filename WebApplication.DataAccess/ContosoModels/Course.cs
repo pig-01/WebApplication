@@ -2,9 +2,13 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
-namespace WebApplication1.ContosoModels
+namespace WebApplication1.DataAccess.ContosoModels
 {
+    [Index("DepartmentId", Name = "IX_DepartmentID")]
     public partial class Course
     {
         public Course()
@@ -13,14 +17,23 @@ namespace WebApplication1.ContosoModels
             Instructor = new HashSet<Person>();
         }
 
+        [Key]
+        [Column("CourseID")]
         public int CourseId { get; set; }
+        [StringLength(50)]
         public string Title { get; set; }
         public int Credits { get; set; }
+        [Column("DepartmentID")]
         public int DepartmentId { get; set; }
 
+        [ForeignKey("DepartmentId")]
+        [InverseProperty("Course")]
         public virtual Department Department { get; set; }
+        [InverseProperty("Course")]
         public virtual ICollection<Enrollment> Enrollment { get; set; }
 
+        [ForeignKey("CourseId")]
+        [InverseProperty("Course")]
         public virtual ICollection<Person> Instructor { get; set; }
     }
 }

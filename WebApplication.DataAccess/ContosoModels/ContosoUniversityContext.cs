@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace WebApplication1.ContosoModels
+namespace WebApplication1.DataAccess.ContosoModels
 {
     public partial class ContosoUniversityContext : DbContext
     {
@@ -37,15 +37,7 @@ namespace WebApplication1.ContosoModels
         {
             modelBuilder.Entity<Course>(entity =>
             {
-                entity.HasIndex(e => e.DepartmentId, "IX_DepartmentID");
-
-                entity.Property(e => e.CourseId).HasColumnName("CourseID");
-
-                entity.Property(e => e.DepartmentId)
-                    .HasColumnName("DepartmentID")
-                    .HasDefaultValueSql("((1))");
-
-                entity.Property(e => e.Title).HasMaxLength(50);
+                entity.Property(e => e.DepartmentId).HasDefaultValueSql("((1))");
 
                 entity.HasOne(d => d.Department)
                     .WithMany(p => p.Course)
@@ -76,22 +68,9 @@ namespace WebApplication1.ContosoModels
 
             modelBuilder.Entity<Department>(entity =>
             {
-                entity.HasIndex(e => e.InstructorId, "IX_InstructorID");
-
-                entity.Property(e => e.DepartmentId).HasColumnName("DepartmentID");
-
-                entity.Property(e => e.Budget).HasColumnType("money");
-
-                entity.Property(e => e.InstructorId).HasColumnName("InstructorID");
-
-                entity.Property(e => e.Name).HasMaxLength(50);
-
                 entity.Property(e => e.RowVersion)
-                    .IsRequired()
                     .IsRowVersion()
                     .IsConcurrencyToken();
-
-                entity.Property(e => e.StartDate).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Instructor)
                     .WithMany(p => p.Department)
@@ -101,16 +80,6 @@ namespace WebApplication1.ContosoModels
 
             modelBuilder.Entity<Enrollment>(entity =>
             {
-                entity.HasIndex(e => e.CourseId, "IX_CourseID");
-
-                entity.HasIndex(e => e.StudentId, "IX_StudentID");
-
-                entity.Property(e => e.EnrollmentId).HasColumnName("EnrollmentID");
-
-                entity.Property(e => e.CourseId).HasColumnName("CourseID");
-
-                entity.Property(e => e.StudentId).HasColumnName("StudentID");
-
                 entity.HasOne(d => d.Course)
                     .WithMany(p => p.Enrollment)
                     .HasForeignKey(d => d.CourseId)
@@ -127,13 +96,7 @@ namespace WebApplication1.ContosoModels
                 entity.HasKey(e => e.InstructorId)
                     .HasName("PK_dbo.OfficeAssignment");
 
-                entity.HasIndex(e => e.InstructorId, "IX_InstructorID");
-
-                entity.Property(e => e.InstructorId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("InstructorID");
-
-                entity.Property(e => e.Location).HasMaxLength(50);
+                entity.Property(e => e.InstructorId).ValueGeneratedNever();
 
                 entity.HasOne(d => d.Instructor)
                     .WithOne(p => p.OfficeAssignment)
@@ -144,24 +107,7 @@ namespace WebApplication1.ContosoModels
 
             modelBuilder.Entity<Person>(entity =>
             {
-                entity.Property(e => e.Id).HasColumnName("ID");
-
-                entity.Property(e => e.Discriminator)
-                    .IsRequired()
-                    .HasMaxLength(128)
-                    .HasDefaultValueSql("('Instructor')");
-
-                entity.Property(e => e.EnrollmentDate).HasColumnType("datetime");
-
-                entity.Property(e => e.FirstName)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.HireDate).HasColumnType("datetime");
-
-                entity.Property(e => e.LastName)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Discriminator).HasDefaultValueSql("('Instructor')");
             });
 
             OnModelCreatingPartial(modelBuilder);

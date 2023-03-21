@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 #nullable disable
 
-namespace WebApplication1.ContosoModels
+namespace WebApplication1.DataAccess.ContosoModels
 {
     [ModelMetadataType(typeof(CourseMetadata))]
     public partial class Course
